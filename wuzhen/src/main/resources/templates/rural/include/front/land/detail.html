@@ -1,0 +1,301 @@
+<div th:fragment="html" id="content">
+    <script type="text/javascript">
+        var pid=getUrlParms("id");
+        var url1 = "forecheckLogin";
+        $(function () {
+
+            //获取数据
+            var dataProduct = {
+                uri: 'foreProducts',
+                product: '',
+                products:[],
+                reviews: [],
+                pvs: [],
+                category: null,
+                firstProductImage: null,
+                content: '',
+                user: {name: '', password: 0,points:0}
+            };
+            var vue = new Vue({
+                el: '#AppId',
+                data: dataProduct,
+                mounted: function () {
+                    this.list();
+                    console.log(this.products)
+                },
+                //展示数据
+                methods: {
+                    list: function () {
+                        var url = this.uri + "/" + pid;
+                        axios.get(url).then(function (response) {
+                            var result = response.data;
+                            vue.pvs = result.data.pvs;
+                            vue.reviews = result.data.reviews;
+                            vue.product=result.data.product;
+                            vue.products=result.data.products;
+                            vue.category = vue.product.category;
+                            vue.firstProductImage = vue.product.firstProductImage;
+                        })
+                    },
+                    doreview: function () {
+                        axios.get(url1).then(function (response) {
+                            if (0 == response.data.code) {
+                                var url = "foredoreview?pid=" + vue.product.id + "&content=" + vue.content;
+                                axios.post(url).then(function (response) {
+                                    var result = response.data;
+                                    vue.list()
+
+                                });
+                            } else {
+                                alert("请登录！！");
+                            }
+                        });
+                    },
+                    getImgSrc:function(img){
+                        return "background-image:url(img/productSingle/"+img+".jpg";
+                    }
+                }
+            });
+        });
+    </script>
+    <!--<div class="baner-bg sm">
+        <div class="bg-item fix" style="background-image:url(img/front/portfolio_bg.jpg)"></div>
+        <div class="vertical-align full white-color">
+            <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
+                <h2 class="h2 title">Post title here<span></span></h2>
+                <div class="empty-space h20-xs"></div>
+                <div class="post-title-desc"><span class="auth">Cristin Moris / January 12,2017</span>
+                    <div class="post-title-link"><a href=""><span>12</span><i class="fa fa-heart-o"></i></a><a
+                            href=""><span>7</span><i class="fa fa-comments-o"></i></a></div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <section class="section">
+        <div class="empty-space h30-xs h100-md"></div>
+        <div class="empty-space h30-xs"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="blog-item">
+                        <div class="image">
+                            <div class="blog-link"><a href="#"><span>12</span><i class="fa fa-heart-o"></i></a><a
+                                    href=""><span>7</span><i class="fa fa-comments-o"></i></a></div>
+                            <div class="blog-cat"><a href="">design</a></div>
+                            <div class="swiper-container" data-speed="1000" ata-pagination-rel="1" data-breakpoints="1"
+                                 data-slides-per-view="1" data-xs-slides="1" data-sm-slides="1" data-md-slides="1">
+                                <div class="swiper-wrapper">
+                                    <div  class="swiper-slide"  v-for="(pi,index) in product.productSingleImages" >
+                                       <div class="bg-item" :style="getImgSrc(pi.id)"></div>
+                                    </div>
+                                </div>
+                                <div class="swiper-pagination swiper-pagination-white pagination-type-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <article class="post-article">
+                        <div class="text">
+                            <div class="empty-space h20-xs"></div>
+                            <h5 class="h5 title">
+                                <a href="" class="hover-4">{{product.name}}</a>
+                            </h5><i>{{product.subTitle}}</i>
+                            <div class="empty-space h10-xs"></div>
+                            <div class="simple-text"><p>{{product.content}}</p></div>
+                        </div>
+                    </article>
+                    <div class="clear"></div>
+                   <!--<div class="shop">
+                        <h4 class="h4"></h4>
+                        <div class="testimonial" style="height: 65px"  v-for="r in reviews">
+                            <img src="img/front/shop/testimonial-1.jpg" alt="">
+                            <div class="author">
+                                <span class="h6">{{r.user.name}}</span>
+                                <span></span>
+                                <span class="star">
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                </span>
+                            </div>
+                        </div>
+                        <div class="testimonial-form-wrapper"><h4 class="h6">添加你的回复</h4>
+                            <div class="empty-space h25-xs"></div>
+                            <form>
+                                <div class="input-wrapper">
+                                    <div class="input-style textarea">
+                                        <textarea id="inputMessage" v-model="content" name="message" class="input" required=""></textarea>
+                                        <label for="inputMessage">Review</label></div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="y-rating"><span>YOUR RATING:</span><span class="star"><i
+                                        class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                     aria-hidden="true"></i><i
+                                        class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                     aria-hidden="true"></i><i
+                                        class="fa fa-star-o" aria-hidden="true"></i></span></div>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <div class="btn-wrap"><a href="#nowhere"  @click="doReview" class="btn-2"><span>提交评价</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="shop">
+                        <h4 class="h4" style="padding-bottom: 20px">评论列表</h4>
+                        <div class="testimonial" style="height: 65px"  v-for="r in reviews">
+                            <img src="img/front/shop/testimonial-1.jpg" alt="">
+                            <div class="author">
+                                <span class="h6">{{r.user.name}}</span>
+                                <span>{{r.createDate}}</span>
+                                <span class="star">
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <p>{{r.content}}</p>
+                        </div>
+                        <div class="testimonial-form-wrapper"><h4 class="h6">Leave a reply</h4>
+                            <div class="empty-space h25-xs"></div>
+                                <form>
+                                    <div class="input-wrapper">
+                                        <div class="input-style textarea">
+                                            <textarea id="inputMessage" v-model="content" name="message" class="input" required=""></textarea>
+                                            <label for="inputMessage">Review</label></div>
+                                    </div>
+                                </form>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="y-rating"><span>YOUR RATING:</span><span class="star"><i
+                                        class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                     aria-hidden="true"></i><i
+                                        class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                     aria-hidden="true"></i><i
+                                        class="fa fa-star-o" aria-hidden="true"></i></span></div>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <div class="btn-wrap"><a href="#nowhere"  @click="doreview" class="btn-2"><span>提交评价</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="sidebar-item">
+                        <div class="empty-space h30-xs h60-sm h0-md h0-lg"></div>
+                        <div class="search shop">
+                            <div class="input-wrapper search">
+                                <div class="input-style"><input id="inputSearch" name="name" type="text" class="input"
+                                                                required=""><label for="inputSearch">Search</label>
+                                    <div class="input-icon"><i class="fa fa-search" aria-hidden="true"></i><input
+                                            type="submit" id="searchsubmit" value=""></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <div class="sidebar-blok">
+                            <h4 class="h5 title">标签</h4>
+                            <div class="empty-space h20-xs"></div>
+                            <a href="" class="tag-link">美食特产</a>
+                            <a class="tag-link">乌镇乡土</a>
+                            <a   href="#nowhere" v-for="pv in pvs"  class="tag-link">{{pv.property.name}}</a>
+                        </div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <div class="sidebar-blok"><h4 class="h5 title">乌镇风俗</h4>
+                            <div class="empty-space h20-xs"></div>
+                            <div class="post-recent">
+                                <div class="img"><a href=""><img src="img/front/post_mini_img_1.jpg" alt="" class="hover-img"></a>
+                                </div>
+                                <div class="txt"><i>January 19, 2016</i>
+                                    <div class="empty-space h10-xs"></div>
+                                    <a href="" class="h6 hover-4">Lorem ipsum dolor siturn amet</a>
+                                    <div class="empty-space h10-xs"></div>
+                                    <span><i>Goran Ramljak</i></span></div>
+                            </div>
+                            <div class="empty-space h30-xs"></div>
+                            <div class="post-recent">
+                                <div class="img"><a href=""><img src="img/front/post_mini_img_2.jpg" alt="" class="hover-img"></a>
+                                </div>
+                                <div class="txt"><i>January 19, 2016</i>
+                                    <div class="empty-space h10-xs"></div>
+                                    <a href="" class="h6 hover-4">Lorem ipsum dolor siturn amet</a>
+                                    <div class="empty-space h10-xs"></div>
+                                    <span><i>Goran Ramljak</i></span></div>
+                            </div>
+                        </div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <div class="sidebar-blok">
+                            <div class="video-item"><a href="" class="bg-item hover-img"
+                                                       style="background-image:url(img/front/video_bg.jpg)"></a>
+                                <div class="play-button open-popup" data-rel="5"><i class="fa fa-play"></i></div>
+                            </div>
+                        </div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <div class="sidebar-blok">
+                            <h4 class="h5 title">热门特产</h4>
+                            <div class="empty-space h20-xs"></div>
+                            <div class="instagram-item">
+                                <a  v-if="index<5"   v-for="(product,index) in products" href="#nowhere">
+                                <img   :src="'img/productSingle/'+product.id+'.jpg'" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="empty-space h30-xs h100-md"></div>
+        <div class="empty-space h30-xs"></div>
+    </section><!-- footer -->
+    <footer>
+        <div class="container small-sm">
+            <div class="row">
+                <div class="col-md-3"><a href="index.html">
+                    <img src="img/front/logo.png" alt=""></a>
+                    <div class="empty-space h10-xs"></div>
+                    <p>Lorem ipsum dolor sit amet, cset tur adipiscingerat rutrum to the next side</p></div>
+                <div class="empty-space h20-xs h0-md"></div>
+                <div class="col-md-2"><h6 class="h9">Address</h6>
+                    <div class="empty-space h10-xs"></div>
+                    <ul>
+                        <li><a href="javascript:;">319 Clematis St.Suite, 100 WPB, FL 33401</a></li>
+                    </ul>
+                </div>
+                <div class="empty-space h20-xs h0-md"></div>
+                <div class="col-md-2 col-md-offset-1"><h6 class="h9">Contact us</h6>
+                    <div class="empty-space h10-xs"></div>
+                    <ul>
+                        <li><a href="tel:+380982367536">tel. +38 098 236 75 36</a></li>
+                        <li><a href="mailto:info@bloom.com">e-mail info@mevo.com</a></li>
+                    </ul>
+                </div>
+                <div class="empty-space h20-xs h0-md"></div>
+                <div class="col-md-3 col-md-offset-1"><h6 class="h9">Follow us</h6>
+                    <div class="empty-space h15-xs h25-md"></div>
+                    <div class="follow"><a class="item" href="javascript:;" target="_blank"><i
+                            class="fa fa-instagram"></i></a><a class="item" href="javascript:;" target="_blank"><i
+                            class="fa fa-facebook"></i></a><a class="item" href="javascript:;" target="_blank"><i
+                            class="fa fa-pinterest-p"></i></a><a class="item" href="javascript:;" target="_blank"><i
+                            class="fa fa-twitter"></i></a><a class="item" href="javascript:;" target="_blank"><i
+                            class="fa fa-google-plus"></i></a></div>
+                </div>
+            </div>
+            <div class="empty-space h25-xs"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="copyright">&copy; 2017 All rights reserved. Development with <span
+                            class="fa fa-heart"></span>by <a href="javascript:;" target="blank">UnionAgency.</a></div>
+                </div>
+            </div>
+        </div>
+    </footer><!-- footer --></div><!-- content --><!-- POPUPS -->

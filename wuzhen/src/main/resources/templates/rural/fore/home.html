@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="include/admin/adminHeader::html('分类管理')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head >
+<body>
+<script type="text/javascript">
+        $(function () {
+            //获取数据
+            var dataCategory={
+                uri:'foreCategories',
+                category:{id:0,name:''},
+                categories:[]
+            };
+            var vue=new Vue({
+                el:'#workingArea',
+                data:dataCategory,
+                mounted:function () {
+                    this.list();
+                },
+                //展示数据
+                methods:{
+                    list:function () {
+                        var url=this.uri;
+                        axios.get(url).then(function (response) {
+                            vue.categories=response.data;
+                        })
+                    }
+                }
+            })
+        });
+</script>
+<div id="workingArea">
+
+     <span th:if="${null!=session.user}">
+		<a href="login" th:text="${session.user.name}"></a>
+		<a href="forelogout" >退出</a>
+	</span>
+
+
+    <span th:if="${null==session.user}">
+		<a href="login">请登录</a>
+		<a href="register">免费注册</a>
+	</span>
+
+    <table>
+        <th>分类名称</th>
+        <tr v-for="category in categories">
+            <td> <a :href="'fore_product_list?id=' + category.id ">{{category.name}}</a></td>
+        </tr>
+
+    </table>
+</div>
+</body>
+</html>

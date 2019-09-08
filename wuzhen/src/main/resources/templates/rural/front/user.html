@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header th:include="rural/user/header::html" ></header>
+<body>
+<div id="loading">
+    <div class="loading-center">
+        <div class="loading-center-absolute">
+            <div class="object object_four"></div>
+            <div class="object object_three"></div>
+            <div class="object object_two"></div>
+            <div class="object object_one"></div>
+        </div>
+    </div>
+</div><!-- Main Container & Overlay============================================ -->
+<div class="main-container fix">
+    <div class="overlay home-overlay"></div>
+</div><!-- Section Close Button -->
+<div class="close-section"><i class="ti-close"></i></div>
+<div id="AppId">
+    <div th:replace="rural/user/home-section::html" ></div>
+    <div th:replace="rural/user/about::html" ></div>
+    <div th:replace="rural/user/resume::html" ></div>
+    <div th:replace="rural/user/portfolio::html" ></div>
+    <div th:replace="rural/user/service::html" ></div>
+    <div th:replace="rural/user/blog::html" ></div>
+    <div th:replace="rural/user/contact::html" ></div>
+</div>
+<div th:include="rural/user/bottom::html"></div>
+</body>
+</html>

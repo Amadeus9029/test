@@ -1,0 +1,76 @@
+package com.wuzhen.rural.pojo;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "review")
+@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
+public class Review {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private int id;
+  private String content;
+
+  @ManyToOne
+  @JoinColumn(name = "uid")
+  private User user;
+  @ManyToOne
+  @JoinColumn(name = "pid")
+  private Product product;
+
+  private Date createdate;
+  private int level;
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public Product getProduct() {
+    return product;
+  }
+
+  public void setProduct(Product product) {
+    this.product = product;
+  }
+
+  public Date getCreatedate() {
+    return createdate;
+  }
+
+  public void setCreatedate(Date createdate) {
+    this.createdate = createdate;
+  }
+
+  public int getLevel() {
+    return level;
+  }
+
+  public void setLevel(int level) {
+    this.level = level;
+  }
+}

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuzhen.village.dao.VillageProductDao">
+
+	<select id="get" resultType="com.wuzhen.village.domain.VillageProductDO">
+		select `id`,`name`,`cid`,`createDate`,`content`,`price`,`subTitle`,`originalPrice`,`promotePrice` from product where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.wuzhen.village.domain.VillageProductDO">
+		select `id`,`name`,`cid`,`createDate`,`content`,`price`,`subTitle`,`originalPrice`,`promotePrice` from product
+        <where>
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="cid != null and cid != ''"> and cid = #{cid} </if>
+		  		  <if test="createdate != null and createdate != ''"> and createDate = #{createdate} </if>
+		  		  <if test="content != null and content != ''"> and content = #{content} </if>
+		  		  <if test="price != null and price != ''"> and price = #{price} </if>
+		  		  <if test="subtitle != null and subtitle != ''"> and subTitle = #{subtitle} </if>
+		  		  <if test="originalprice != null and originalprice != ''"> and originalPrice = #{originalprice} </if>
+		  		  <if test="promoteprice != null and promoteprice != ''"> and promotePrice = #{promoteprice} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+ 	<select id="count" resultType="int">
+		select count(*) from product
+		 <where>
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="cid != null and cid != ''"> and cid = #{cid} </if>
+		  		  <if test="createdate != null and createdate != ''"> and createDate = #{createdate} </if>
+		  		  <if test="content != null and content != ''"> and content = #{content} </if>
+		  		  <if test="price != null and price != ''"> and price = #{price} </if>
+		  		  <if test="subtitle != null and subtitle != ''"> and subTitle = #{subtitle} </if>
+		  		  <if test="originalprice != null and originalprice != ''"> and originalPrice = #{originalprice} </if>
+		  		  <if test="promoteprice != null and promoteprice != ''"> and promotePrice = #{promoteprice} </if>
+		  		</where>
+	</select>
+
+	<insert id="save" parameterType="com.wuzhen.village.domain.VillageProductDO" useGeneratedKeys="true" keyProperty="id">
+		insert into product
+		(
+			`name`,
+			`cid`,
+			`createDate`,
+			`content`,
+			`price`,
+			`subTitle`,
+			`originalPrice`,
+			`promotePrice`
+		)
+		values
+		(
+			#{name},
+			#{cid},
+			#{createdate},
+			#{content},
+			#{price},
+			#{subtitle},
+			#{originalprice},
+			#{promoteprice}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.wuzhen.village.domain.VillageProductDO">
+		update product
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="cid != null">`cid` = #{cid}, </if>
+			<if test="createdate != null">`createDate` = #{createdate}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="price != null">`price` = #{price}, </if>
+			<if test="subtitle != null">`subTitle` = #{subtitle}, </if>
+			<if test="originalprice != null">`originalPrice` = #{originalprice}, </if>
+			<if test="promoteprice != null">`promotePrice` = #{promoteprice}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from product where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from product where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

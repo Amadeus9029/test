@@ -1,0 +1,25 @@
+<div th:fragment="html" id="blog" class="blog-section section" xmlns:th="http://www.w3.org/1999/xhtml">
+  <div class="table">
+        <div class="table-cell">
+            <div class="container">
+                <div class="section-wrapper animated row">
+                    <div class="col-xs-12">
+                        <div class="section-title"><h1>Blog</h1>
+                            <p>My latest news</p></div>
+                    </div>
+                    <div class="blog-wrapper">
+                        <div  v-for="review in reviews" class="sin-blog col-md-6 col-xs-12">
+                           <a href="single-blog.html" class="blog-image" >
+                              <img
+                                src="user/img/blog/1.jpg" alt="blog"/></a>
+                            <div class="blog-content">
+                               <h2><a href="single-blog.html">{{review.product.name}}</a></h2>
+                                <div class="blog-meta fix"><a href="#"><i class="ti-user"></i>Author</a><span><i
+                                        class="ti-calendar"></i>31-04-2016</span></div>
+                            </div>
+                        </div>
+                    </div></div></div>
+        </div>
+    </div>
+
+</div>

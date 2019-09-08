@@ -1,0 +1,27 @@
+<div th:fragment="html" class="popup-content basket-popup" data-rel="1" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="layer-close"></div>
+    <div class="popup-container right" style="width: 260px">
+        <div class="demo">
+                <div class="row">
+                    <div class="col-md-12" th:if="${null!=session.user}">
+                        <div class="our-team">
+                            <div class="pic">
+                               <img src="img/productSingle/1.jpg">
+                            </div>
+                            <div class="team-content">
+                                <h3 class="title" th:text="'欢迎您'+${session.user.name}"></h3>
+                                <Span class="post" th:text="'账户积分：'+${session.user.points}">
+                                    </Span>
+                            </div>
+                            <ul class="social">
+
+                                <li><a href="front_user">个人详情</a></li>
+                                <li><a href="forelogout">退出登录</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="button-close" style="z-index: 999"></div>
+    </div>
+</div>

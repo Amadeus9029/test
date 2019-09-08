@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="include/admin/adminHeader::html('分类管理')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head >
+<body>
+<script type="text/javascript">
+    var pid=getUrlParms("id");
+        $(function () {
+            //获取数据
+            var dataProduct={
+                uri:'foreProducts',
+                product:'',
+                reviews:[],
+                pvs:[],
+                category:null,
+                firstProductImage:null,
+                content:''
+            };
+            var vue=new Vue({
+                el:'#workingArea',
+                data:dataProduct,
+                mounted:function () {
+                    this.list();
+                },
+                //展示数据
+                methods:{
+                    list:function () {
+                        var url=this.uri+"/"+pid;
+                        axios.get(url).then(function (response) {
+                            var result=response.data;
+                            vue.product=result.data.product;
+                            vue.pvs=result.data.pvs;
+                            vue.reviews=result.data.reviews;
+                            vue.category = vue.product.category;
+                            vue.firstProductImage=vue.product.firstProductImage;
+                        })
+                    },
+                    doreview:function(){
+                        var url =  "foredoreview?pid="+vue.product.id+"&content="+vue.content;
+                        axios.post(url).then(function(response) {
+                            var result = response.data;
+                            vue.list();
+                        });
+                    },
+                    foreBuyOne:function () {
+                        var url =  "foreBuyOne?pid="+vue.product.id;
+                        axios.post(url).then(function(response) {
+                            var result = response.data;
+                        });
+                    }
+                }
+            })
+        });
+</script>
+<div id="workingArea">
+    <table>
+        <th>产品ID</th>
+        <th>产品图片</th>
+        <th>产品名称</th>
+        <th>产品小标题</th>
+        <th>产品属性值</th>
+        <th>产品评论</th>
+        <th>立即购买</th>
+        <tr>
+            <td><a href="">{{product.id}}</a></td>
+            <td><img v-if="firstProductImage!=null" :src="'img/productSingle/'+firstProductImage.id+'.jpg'" class="bigImg"></td>
+            <td><a href="">{{product.name}}</a></td>
+            <td>
+                {{product.subTitle}}
+            </td>
+            <td ><p v-for="pv in pvs">{{pv.value}}</p></td>
+            <td ><p v-for="review in reviews">
+
+
+     <span th:if="${null!=session.user}">
+		<a th:text="${session.user.name}"></a>
+	</span>
+                {{review.content}}</p></td>
+            <td>
+                <a href="#nowhere"  @click="foreBuyOne" class="btn btn-success">立即购买</a>
+            </td>
+        </tr>
+        <tr>
+            <img v-for="pi in product.productSingleImages"
+                 :src="'img/productSingle_small/'+pi.id+'.jpg'"
+                 :bigImageURL="'img/productSingle/'+pi.id+'.jpg'" class="smallImage"/>
+        </tr>
+    </table>
+            <table>
+                <tr>
+                    <td>评论内容</td>
+                    <td><input   v-model.trim="content" type="text" class="form-control"></td>
+                </tr>
+                <tr class="submitTR">
+                    <td colspan="2" align="center">
+                        <a href="#nowhere"  @click="doreview" class="btn btn-success">提交</a>
+                    </td>
+                </tr>
+            </table>
+
+
+</div>
+</body>
+</html>

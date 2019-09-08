@@ -1,0 +1,76 @@
+<div id="app" th:fragment="html">
+    <div class="container">
+        <div class="cart">
+            <div class="item-list-wrap">
+                <div class="cart-item">
+                    <div class="cart-item-head">
+                        <ul>
+                            <li>商品信息</li>
+                            <li>商品金额</li>
+                            <li>商品数量</li>
+                            <li>总金额</li>
+
+                        </ul>
+                    </div>
+
+                    <ul class="cart-item-list">
+                        <li v-for="(item,index) in records">
+
+                            <div class="cart-tab-1">
+                                <div class="cart-item-pic">
+                                    <img :src="'img/productSingle_small/'+item.product.id+'.jpg'" alt="">
+                                </div>
+                                <div class="cart-item-title">
+                                    <div class="item-name">
+                                        {{ item.product.name}}
+                                    </div>
+                                </div>
+
+                                <!--<div class="item-include">
+                                    <dl>
+                                        <dt>赠送</dt>
+                                        <dd v-for="part in item.parts" v-text="part.partsName"></dd>
+                                    </dl>
+                                </div>-->
+                            </div>
+
+                            <div class="cart-tab-2">
+
+                                <div class="item-price"> {{ item.product.price }}</div>
+                            </div>
+
+                            <div class="cart-tab-3">
+                                <div class="item-quantity">
+                                    <div class="select-self select-self-open">
+                                        <div class="quentity">
+                                            <a href="javascript:;" @click=" changeMoney(item,-1)"> - </a>
+                                            <input style="text-align: center" type="text" disabled="" v-model="item.number">
+                                            <a href="javascript:; " @click=" changeMoney(item,1) "> + </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cart-tab-4">
+
+                                <div class="item-price-total">{{item.product.price * item.number}}</div>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cart-foot-wrap">
+                <div class="cart-foot-r">
+                    <div class="item-total">
+                        总价：<span class="total-price"> {{ total }}</span>
+                    </div>
+                    <div class="next-btn-wrap">
+                        <a href="javascript:;" @click="createOrder" class="btn btn--red"> 付款 </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

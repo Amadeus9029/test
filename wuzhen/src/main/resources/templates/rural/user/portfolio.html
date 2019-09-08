@@ -1,0 +1,40 @@
+<div th:fragment="html" id="portfolio" class="portfolio-section section" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="table">
+        <div class="table-cell">
+            <div class="container">
+                <div class="section-wrapper animated row">
+                    <div class="col-xs-12">
+                        <div class="section-title"><h1>美食特产</h1>
+                            <p>我兑换过的商品展示</p></div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="portfolio-wrapper text-center">
+                            <div v-for="record in records" class="single-portfolio col-md-4 col-sm-6 col-xs-12">
+                                <img src="user/img/portfolio/1.jpg" alt=""/>
+                                <a href="user/img/portfolio/1.jpg" class="portfolio-hover">
+                                    <h2>{{record.product.name}}</h2>
+                                    <p>{{record.product.price}}</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--兑换的商品-->
+
+   <!-- <table class="table table-striped table-bordered table-hover  table-condensed">
+        <thead>
+        <tr class="success">
+            <th>ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="record in records">
+            <td>{{record.id}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <p>{{user.name}}</p>-->
+</div><!-- Service Section============================================ -->

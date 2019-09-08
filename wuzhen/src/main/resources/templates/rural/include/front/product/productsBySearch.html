@@ -1,0 +1,367 @@
+<div th:fragment="html">
+    <script type="text/javascript">
+        var pid=getUrlParms("id");
+        var url1 = "forecheckLogin";
+        $(function () {
+            //获取数据
+            var dataProduct = {
+                uri: 'foreProducts',
+                product: '',
+                reviews: [],
+                pvs: [],
+                category: null,
+                firstProductImage: null,
+                content: '',
+                user: {name: '', password: 0,points:0}
+            };
+            var vue = new Vue({
+                el: '#App',
+                data: dataProduct,
+                mounted: function () {
+                    this.list();
+                },
+                //展示数据
+                methods: {
+                    list: function () {
+                        var url = this.uri + "/" + pid;
+                        axios.get(url).then(function (response) {
+                            var result = response.data;
+                            vue.product = result.data.product;
+                            vue.pvs = result.data.pvs;
+                            vue.reviews = result.data.reviews;
+                            vue.category = vue.product.category;
+                            vue.firstProductImage = vue.product.firstProductImage;
+                        })
+                    },
+                    doreview: function () {
+                        axios.get(url1).then(function (response) {
+                            if (0 == response.data.code) {
+                                var url = "foredoreview?pid=" + vue.product.id + "&content=" + vue.content;
+                                axios.post(url).then(function (response) {
+                                    var result = response.data;
+                                    vue.list();
+                                });
+                            } else {
+                                alert("请登录！！");
+                            }
+                        });
+                    },
+                    foreBuyOne: function () {
+                        axios.get(url1).then(function (response) {
+                            if (0 == response.data.code) {
+                                var url = "foreBuyOne?pid=" + vue.product.id;
+                                axios.post(url).then(function (response) {
+                                    var result = response.data;
+                                    if (result.code==0)
+                                        console.log("购买成功");
+                                    else console.log("购买失败");
+                                });
+                            } else
+                                alert("请登录！！");
+
+                        });
+                    },
+                    image: function (e) {
+                        console.log(e);
+                        var bigImageURL = e.currentTarget;
+                        console.log(bigImageURL);
+                        /*var bigImageURL =dom.attr("bigImageURL");
+                            $("img.img-main").attr("src",bigImageURL);*/
+                    }
+                }
+            });
+        });
+
+    </script>
+
+    <div class="shop"><!-- products -->
+        <div class="container">
+            <div class="empty-space h90-xs h100-md"></div>
+            <div class="empty-space h0-xs h80-md"></div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
+                    <article class="text-center grey-dark"><h1 class="h2">Products<span></span></h1>
+                        <div class="empty-space h30-xs"></div>
+                        <p>Curabitur ultricies semper eleifend. Pellentesque molestie purus non something else not
+                            tempus bibendum mattis making something</p></article>
+                </div>
+            </div>
+            <div class="empty-space h30-xs h60-md"></div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="sidebar-item">
+                        <div class="empty-space h30-xs h60-sm h0-md h0-lg"></div>
+                        <div class="search shop">
+                            <div class="input-wrapper search">
+                                <div class="input-style"><input id="inputSearch" name="name" type="text" class="input"
+                                                                required=""><label for="inputSearch">Search</label>
+                                    <div class="input-icon"><i class="fa fa-search" aria-hidden="true"></i><input
+                                            type="submit" id="searchsubmit" value=""></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <div class="sidebar-blok"><h4 class="h5 title">Tags</h4>
+                            <div class="empty-space h20-xs"></div>
+                            <a href="" class="tag-link">cinema</a><a href="" class="tag-link">music</a><a href=""
+                                                                                                          class="tag-link">culture</a><a
+                                    href="" class="tag-link">business</a><a href="" class="tag-link">travel</a><a
+                                    href="" class="tag-link">fashion</a><a href="" class="tag-link">branding</a><a
+                                    href="" class="tag-link">travelling</a></div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <div class="sidebar-blok"><h4 class="h5 title">Popular post</h4>
+                            <div class="empty-space h20-xs"></div>
+                            <div class="post-recent">
+                                <div class="img"><a href="post.html"><img src="img/front/post_mini_img_1.jpg" alt=""
+                                                                          class="hover-img"></a></div>
+                                <div class="txt"><i>January 19, 2016</i>
+                                    <div class="empty-space h10-xs"></div>
+                                    <a href="post.html" class="h6 hover-4">Lorem ipsum dolor siturn amet</a>
+                                    <div class="empty-space h10-xs"></div>
+                                    <span><i>Goran Ramljak</i></span></div>
+                            </div>
+                            <div class="empty-space h30-xs"></div>
+                            <div class="post-recent">
+                                <div class="img"><a href="post.html"><img src="img/front/post_mini_img_2.jpg" alt=""
+                                                                          class="hover-img"></a></div>
+                                <div class="txt"><i>January 19, 2016</i>
+                                    <div class="empty-space h10-xs"></div>
+                                    <a href="post.html" class="h6 hover-4">Lorem ipsum dolor siturn amet</a>
+                                    <div class="empty-space h10-xs"></div>
+                                    <span><i>Goran Ramljak</i></span></div>
+                            </div>
+                        </div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <div class="sidebar-blok">
+                            <div class="swiper-container" data-speed="1000" data-pagination-rel="1" data-breakpoints="1"
+                                 data-slides-per-view="1" data-xs-slides="1" data-sm-slides="1" data-md-slides="1">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <div class="twitter-slide"><i class="date">20 min ago</i><i
+                                                class="fa fa-twitter icon"></i>
+                                            <div class="empty-space h40-xs"></div>
+                                            <div class="simple-text"><p>Lorem ipsum dolor sit amet. Labore quibusdam in
+                                                sint quam impedit quia repellat a, nulla ab sapiente.</p></div>
+                                            <div class="empty-space h20-xs"></div>
+                                            <a href="" class="tw-author">@mevotemplate</a><a href=""><i>https://www.youtube.com/</i></a>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="twitter-slide"><i class="date">20 min ago</i><i
+                                                class="fa fa-twitter icon"></i>
+                                            <div class="empty-space h40-xs"></div>
+                                            <div class="simple-text"><p>Lorem ipsum dolor sit amet. Labore quibusdam in
+                                                sint quam impedit quia repellat a, nulla ab sapiente.</p></div>
+                                            <div class="empty-space h20-xs"></div>
+                                            <a href="" class="tw-author">@mevotemplate</a><a href=""><i>https://www.youtube.com/</i></a>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="twitter-slide"><i class="date">20 min ago</i><i
+                                                class="fa fa-twitter icon"></i>
+                                            <div class="empty-space h40-xs"></div>
+                                            <div class="simple-text"><p>Lorem ipsum dolor sit amet. Labore quibusdam in
+                                                sint quam impedit quia repellat a, nulla ab sapiente.</p></div>
+                                            <div class="empty-space h20-xs"></div>
+                                            <a href="" class="tw-author">@mevotemplate</a><a href=""><i>https://www.youtube.com/</i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-pagination swiper-pagination-black pagination-type-1"></div>
+                            </div>
+                        </div>
+                        <div class="empty-space h30-sm h20-xs"></div>
+                        <div class="sidebar-blok">
+                            <div class="video-item"><a href="post.html" class="bg-item hover-img"
+                                                       style="background-image:url(img/front/video_bg.jpg)"></a>
+                                <div class="play-button open-popup" data-rel="5"><i class="fa fa-play"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-8 pull-right">
+                    <div class="detail-item">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <!--<img class="img-main" src="img/front/shop/item-7.jpg" alt="">
+                                <div class="img-preview">
+                                    <img data-src="img/front/shop/item-7.jpg"  src="img/front/shop/item-7-xs.jpg" alt=""><img
+                                        data-src="img/front/shop/item-7-2.jpg" src="img/front/shop/item-7-2-xs.jpg" alt=""><img
+                                        data-src="img/front/shop/item-7-3.jpg" src="img/front/shop/item-7-3-xs.jpg" alt=""><img
+                                        data-src="img/front/shop/item-7-4.jpg" src="img/front/shop/item-7-4-xs.jpg" alt="">
+                                </div>-->
+                                <img class="img-main" v-if="firstProductImage!=null" :src="'img/productSingle/'+firstProductImage.id+'.jpg'">
+                                <div class="img-preview">
+                                    <img class="imgSmall"
+                                         v-for="pi in product.productSingleImages"
+                                         :src="'img/productSingle_small/'+pi.id+'.jpg'"
+                                         @click="image($event)"
+                                         :bigImageURL="'img/productSingle/'+pi.id+'.jpg'" alt="">
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="col-md-5">
+                                <article class="description"><h3 class="h3">{{product.name}}</h3>
+                                    <ul>
+                                        <li><span>price:</span><span class="price">&#36;567<sup>00</sup></span></li>
+                                        <li><span>Reviews:</span><span class="info">26</span><span class="star"><i
+                                                class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                             aria-hidden="true"></i><i
+                                                class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                             aria-hidden="true"></i><i
+                                                class="fa fa-star-o" aria-hidden="true"></i></span></li>
+                                        <li><span>Available:</span><span class="info">yes</span></li>
+                                        <li><span>color:</span><span class="color"><span class="active"
+                                                                                         style="background-color: #28252c; outline-color: #28252c;"></span><span
+                                                style="background-color: #d2cbc6; outline-color: #d2cbc6;"></span><span
+                                                style="background-color: #4e77ab; outline-color: #4e77ab;"></span><span
+                                                style="background-color: #c48d8d; outline-color: #c48d8d;"></span></span>
+                                        </li>
+                                    </ul>
+                                    <p>Ut enim ad minim veniam, quis nostrud laboris nisi ut aliquip com qu duis aute
+                                        irure dolor in reprehenderit cillum dolore eu fugiat nulla pariatur excepteur
+                                        sint occa ecat cupidatat culpa qui officia</p></article>
+                                <div class="quantity-wrapper"><span>quantity:</span>
+                                    <div class="quantity"><input type="number" value="1"><i class="fa fa-caret-left"
+                                                                                            aria-hidden="true"></i><i
+                                            class="fa fa-caret-right" aria-hidden="true"></i></div>
+                                </div>
+                                <div class="btn-wrap"><a href="#nowhere"  @click="foreBuyOne" class="btn-2"><span>立即兑换</span></a></div>
+                                <div class="btn-wrap"><a href="" class="btn-1 border"><span>add to favourites</span></a>
+                                </div>
+                                <div class="follow-wrapper"><span>share:</span>
+                                    <div class="follow"><a class="item" href="javascript:;" target="_blank"><i
+                                            class="fa fa-instagram"></i></a><a class="item" href="javascript:;"
+                                                                               target="_blank"><i
+                                            class="fa fa-facebook"></i></a><a class="item" href="javascript:;"
+                                                                              target="_blank"><i
+                                            class="fa fa-pinterest-p"></i></a><a class="item" href="javascript:;"
+                                                                                 target="_blank"><i
+                                            class="fa fa-twitter"></i></a><a class="item" href="javascript:;"
+                                                                             target="_blank"><i
+                                            class="fa fa-google-plus"></i></a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-space h60-xs"></div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="tabs-block">
+                                <div class="tab-menu active">属性</div>
+                                <div class="tab-menu">评论</div>
+                                <div class="tab-entry" style="display: block;">
+                                    <div class="article">
+                                        <p>产品属性</p>
+                                        <ul class="disc">
+                                            <li v-for="pv in pvs"><span>{{pv.property.name}}: {{pv.value | subStringFilter(0,10)}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="tab-entry">
+                                    <div v-for="r in reviews" class="testimonial">
+                                        <img src="img/front/shop/testimonial-1.jpg" alt="">
+                                        <div class="article">
+                                            <div class="author">
+                                                <span class="h6">{{r.user.name}}</span>
+                                                <span>{{r.createDate}}</span>
+                                                <span class="star">
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <p>{{r.content}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="testimonial-form-wrapper">
+                                        <div class="empty-space h20-xs"></div>
+                                        <h4 class="h4 text-center">Add your review</h4>
+                                        <div class="empty-space h30-xs"></div>
+                                        <form>
+                                            <div class="input-wrapper">
+                                                <div class="input-style textarea">
+                                                    <textarea id="inputMessage" name="message" class="input" required=""></textarea>
+                                                    <label for="inputMessage">Review</label></div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="y-rating"><span>YOUR RATING:</span><span class="star"><i
+                                                    class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                                 aria-hidden="true"></i><i
+                                                    class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                                 aria-hidden="true"></i><i
+                                                    class="fa fa-star-o" aria-hidden="true"></i></span></div>
+                                        </div>
+                                        <div class="col-sm-6 text-right">
+                                            <div class="btn-wrap"><a href="#nowhere"  @click="doreview" class="btn-2"><span>提交评价</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-space h50-xs h100-md"></div>
+                    <div class="empty-space h0-xs h10-md"></div>
+                    <div class="row text-center">
+                        <div class="col-xs-12"><h2 class="h2">You may also like<span></span></h2>
+                            <div class="empty-space h30-xs"></div>
+                        </div>
+                        <div class="col-md-3 col-sm-6"><a href="" class="img-hover-2">
+                            <img src="img/front/shop/item-10-md.jpg"
+                                 alt="" class="img"></a>
+                            <article>
+                                <div class="empty-space h10-xs"></div>
+                                <a href=""><h6 class="h8 hover-4">MINIMALISTIC LAMP</h6></a>
+                                <div class="empty-space h5-xs"></div>
+                                <span class="price price-sm">&#36;286<sup>00</sup></span>
+                                <div class="empty-space h30-xs h0-sm"></div>
+                            </article>
+                        </div>
+                        <div class="col-md-3 col-sm-6"><a href="" class="img-hover-2"><img src="img/front/shop/item-9-md.jpg"
+                                                                                           alt="" class="img"></a>
+                            <article>
+                                <div class="empty-space h10-xs"></div>
+                                <a href=""><h6 class="h8 hover-4">MINIMALISTIC LAMP</h6></a>
+                                <div class="empty-space h5-xs"></div>
+                                <span class="price price-sm">&#36;286<sup>00</sup></span>
+                                <div class="empty-space h30-xs h0-sm"></div>
+                            </article>
+                        </div>
+                        <div class="col-md-3 col-sm-6"><a href="" class="img-hover-2"><img src="img/front/shop/item-4-md.jpg"
+                                                                                           alt="" class="img"></a>
+                            <article>
+                                <div class="empty-space h10-xs"></div>
+                                <a href=""><h6 class="h8 hover-4">MINIMALISTIC LAMP</h6></a>
+                                <div class="empty-space h5-xs"></div>
+                                <span class="price price-sm">&#36;286<sup>00</sup></span>
+                                <div class="empty-space h30-xs h0-sm"></div>
+                            </article>
+                        </div>
+                        <div class="col-md-3 col-sm-6"><a href="" class="img-hover-2"><img src="img/front/shop/item-5-md.jpg"
+                                                                                           alt="" class="img"></a>
+                            <article>
+                                <div class="empty-space h10-xs"></div>
+                                <a href=""><h6 class="h8 hover-4">MINIMALISTIC LAMP</h6></a>
+                                <div class="empty-space h5-xs"></div>
+                                <span class="price price-sm">&#36;286<sup>00</sup></span>
+                                <div class="empty-space h30-xs h0-sm"></div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="empty-space h65-xs h100-md"></div>
+    <div class="empty-space h0-xs h30-md"></div><!-- footer -->
+
+</div>

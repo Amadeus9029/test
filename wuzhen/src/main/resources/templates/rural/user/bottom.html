@@ -1,0 +1,154 @@
+<template th:fragment="html" xmlns:th="http://www.w3.org/1999/XSL/Transform">
+    <script src="user/js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="js/jquery/2.0.0/jquery.min.js"></script>
+    <script src="js/bootstrap/3.3.6/bootstrap.min.js"></script>
+    <script src="js/front/sweetalert2.min.js"></script>
+    <script src="js/vue/2.5.16/vue.min.js"></script>
+    <script src="js/axios/0.17.1/axios.min.js"></script>
+    <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
+    <script src="user/js/vendor/jquery-1.12.0.min.js"></script>
+    <script src="user/js/plugins.js"></script>
+    <!--问卷-->
+    <script type="text/javascript" src="user/question/js/classie.js"></script>
+    <script type="text/javascript" src="user/question/js/selectFx.js"></script>
+    <script type="text/javascript" src="user/question/js/fullscreenForm.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            //获取数据
+            var dataProduct = {
+                uri: 'userProducts',
+                reviews: [],
+                records: [],
+                questions:[],
+                firstProductImage: null,
+                user: {name: '', password: 0,points:0}
+            };
+            var vue = new Vue({
+                el: '#AppId',
+                data: dataProduct,
+                mounted: function () {
+                    this.list();
+                },
+                updated:function(){
+                    var formWrap = document.getElementById( 'fs-form-wrap' );
+
+                    [].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {
+                        new SelectFx( el, {
+                            stickyPlaceholder: false,
+                            onChange: function(val){
+                                document.querySelector('span.cs-placeholder').style.backgroundColor = val;
+                            }
+                        });
+                    } );
+
+                    new FForm( formWrap, {
+                        onReview : function() {
+                            classie.add( document.body, 'overview' ); // for demo purposes only
+                        }
+                    } );
+                },
+                //展示数据
+                methods: {
+                    list: function () {
+                        axios.get(this.uri).then(function (response) {
+                            var result = response.data;
+                            vue.records = result.data.records;
+                            vue.reviews = result.data.reviews;
+                            vue.questions = result.data.questions;
+                            vue.user = result.data.user;
+                        })
+                    },
+                    getId:function (index,x) {
+                        return 'q'+index+x;
+                    },
+                    getName:function (x) {
+                        return 'q'+x;
+                    },
+                    doCheckAnswer:function () {
+                        this.$nextTick(function(){
+                            var i=0,right=0,wrong=0;
+                            for( ; i<this.questions.length;i++){
+                                if(this.questions[i].answer
+                                    ==$('#myform').find('input[name=q'+i+']:checked').val())right++;
+                            }
+                            wrong=this.questions.length-right;
+                            var getPoints=right*10;
+                            var url2="addQuestionRecord";
+                            var formData = new FormData();
+                            $("#points").val(parseInt($("#points").val())+getPoints)
+                            var points=$("#points").val();
+                            axios.post(url2,{"acnumber":right,"erunmber": wrong});
+                            swal({
+                                    title: '乌镇民俗测试',
+                                    text: '一共答对'+right+'道题目'+'答错'+wrong+'道题目',
+                                    type:'success'
+                            }
+                            ).then(function() {
+                                    swal({
+                                            title: '答对一道题获取10积分',
+                                            text: '此次答题获取积分'+getPoints+' 用户当前积分'+points,
+                                            imageUrl: 'https://unsplash.it/400/200',
+                                            imageWidth: 400,
+                                            imageHeight: 200,
+                                            animation: false
+                                    }).then(function () {
+                                            location.href="front_user";
+                                    });
+                            })
+                        })
+                    }
+                }
+            });
+        });
+
+    </script>
+    <script src="user/js/main.js"></script>
+    <script type="text/javascript">
+        var headerImg=null;
+        function getHeaderImg(event){
+            headerImg=event.target.files[0];
+        }
+        function updateUser(){
+            var name=$('#userName').val();
+            var url ="foreUpdate";
+
+            var formData=new FormData();
+            formData.append("name",name);
+            formData.append("image", headerImg);
+            console.log(formData.get('image'));
+            axios.post(url,formData).then(function(response) {
+                console.log("更新成功")
+            });
+        }
+        var survey = []; //Bidimensional array: [ [1,3], [2,4] ]
+        //switcher function:
+        $(".rb-tab").click(function(){
+            //Spot switcher:
+            $(this).parent().find(".rb-tab").removeClass("rb-tab-active");
+            $(this).addClass("rb-tab-active");
+        });
+        //Save data:
+        $(".trigger").click(function(){
+            //Empty array:
+            survey = [];
+            //Push data:
+            for (i=1; i<=$(".rb").length; i++) {
+                var rb = "rb" + i;
+                var rbValue = parseInt($("#rb-"+i).find(".rb-tab-active").attr("data-value"));
+                //Bidimensional array push:
+                survey.push([i, rbValue]); //Bidimensional array: [ [1,3], [2,4] ]
+            };
+            //Debug:
+            debug();
+        });
+        //Debug:
+        function debug(){
+            var debug = "";
+            for (i=0; i<survey.length; i++) {
+                debug += "No " + survey[i][0] + " = " + survey[i][1] + "\n";
+            };
+            alert(debug);
+        };
+    </script>
+</template>

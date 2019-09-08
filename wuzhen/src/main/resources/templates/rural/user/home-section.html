@@ -1,0 +1,46 @@
+<div th:fragment="html" id="home-section section text-center active" class="home-section section text-center active"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="table">
+        <div class="table-cell">
+            <div class="container"><!-- Section Wrapper -->
+                <div class="section-wrapper animated row">
+                    <div class="home-wrapper"><!-- Hero Content -->
+                        <div class="hero-content pull-left"><!-- Image --><img src="user/img/photo.jpg" alt=""/>
+                            <!-- Caption -->
+                            <div class="caption"><h1 th:text="${session.user.name}"></h1>
+                                <span>我的等级：黄金</span><!--<span th:text="${session.user.level}"></span>--><!-- Social -->
+                                <div class="social"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i
+                                        class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-linkedin"></i></a><a
+                                        href="#"><i class="fa fa-behance"></i></a><a href="#"><i
+                                        class="fa fa-google-plus"></i></a></div>
+                            </div>
+                        </div><!-- Hero Content End --><!-- Navigation -->
+                        <nav class="navigation pull-left">
+                            <ul>
+                                <li class="about">
+                                    <a href="#about">
+                                        <i class="icon ti-user"></i>
+                                        <i class="icon-bg ti-user"></i>
+                                        <span class="text">
+                                        回到乌镇
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="resume"><a href="#resume"><i class="icon ti-id-badge"></i><i
+                                        class="icon-bg ti-id-badge"></i><span class="text">我的信息</span></a></li>
+                                <li class="service"><a href="#service"><i class="icon ti-panel"></i><i
+                                        class="icon-bg ti-panel"></i><span class="text">购物车</span></a></li>
+                                <li class="portfolio"><a href="#portfolio"><i class="icon ti-layout-grid2"></i><i
+                                        class="icon-bg ti-layout-grid2"></i><span class="text">我的订单</span></a></li>
+                                <li class="blog"><a href="#blog"><i class="icon ti-write"></i>
+                                    <i
+                                        class="icon-bg ti-write"></i><span class="text">用户评论</span></a></li>
+                                <li class="contact"><a href="#contact"><i class="icon ti-email"></i><i
+                                        class="icon-bg ti-email"></i><span class="text">民俗答题</span></a></li>
+                            </ul>
+                        </nav><!-- Navigation End -->
+                    </div>
+                </div><!-- Section Wrapper End --></div>
+        </div>
+    </div>
+</div><!-- About Section============================================ -->

@@ -1,0 +1,20 @@
+<div th:fragment="html" id="contact" class="contact-section section" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="fs-form-wrap" id="fs-form-wrap">
+        <form id="myform"   class="fs-form fs-form-full" autocomplete="off">
+            <input type="hidden" id="points"  th:value="${session.user.points}">
+            <ol class="fs-fields">
+                <li v-for="(q,index) in questions">
+                    <label class="fs-field-label fs-anim-upper" data-info="答对题目能够获取积分换取特产美食升级">{{q.content}}</label>
+                    <div class="fs-radio-custom clearfix fs-anim-lower">
+                        <span><input :id="getId(index,'a')" :name="getName(index)" type="radio"  value="a"><label :for="getId(index,'a')" class="radio-conversion">{{q.answer_a}}</label></span>
+                        <span><input :id="getId(index,'b')" :name="getName(index)" type="radio" value="b"><label :for="getId(index,'b')" class="radio-social">{{q.answer_b}}</label></span>
+                        <span><input :id="getId(index,'c')" :name="getName(index)" type="radio" value="c"><label :for="getId(index,'c')" class="radio-mobile">{{q.answer_c}}</label></span>
+                        <span><input :id="getId(index,'d')" :name="getName(index)" type="radio" value="d"><label :for="getId(index,'d')" class="radio-mobile">{{q.answer_d}}</label></span>
+                      </div>
+                </li>
+            </ol><!-- /fs-fields -->
+            <button class="fs-submit" type="button" @click="doCheckAnswer">发送答案</button>
+            <!--<button class="fs-submit" type="button" @click="checkAnswer" >发送答案</button>-->
+        </form><!-- /fs-form -->
+    </div><!-- /fs-form-wrap -->
+</div>

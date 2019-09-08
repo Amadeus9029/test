@@ -1,0 +1,52 @@
+<div  th:fragment="html" class="popup-content login-popup" data-rel="3">
+    <div class="layer-close"></div>
+    <div class="popup-container size-3">
+        <div class="popup-align">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2 class="h3">用户注册</h2>
+                    <div class="empty-space h55-xs"></div>
+                </div>
+            </div>
+            <div class="row separator">
+                <div class="col-sm-6">
+                    <h4 class="h4 text-center">欢迎来到乌镇</h4>
+                    <div class="empty-space h20-xs"></div>
+                    <img width="400px" height="220px" src="img/productSingle/1.jpg" alt="">
+                    <div class="empty-space h30-xs fl"></div>
+                </div>
+                <div class="col-sm-6">
+                    <form>
+                        <div class="loginErrorMessageDiv" style="visibility: hidden">
+                            <div class="alert alert-danger" style="padding-bottom: 0">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                <p class="errorMessage">错误信息显示地区</p>
+                            </div>
+                        </div>
+                        <div class="empty-space h20-xs"></div>
+                        <div class="input-wrapper">
+                            <div class="input-style">
+                                <input  id="userName2" type="text" class="input" >
+                                <label for="userName2">您的账户</label>
+                            </div>
+                            <div class="input-style"><input id="inputPass2" name="psw" type="password" class="input"
+                                                            required=""><label for="inputPass2">您的密码</label>
+                            </div>
+                            <div class="input-style"><input id="inputRePass" name="psw" type="password"
+                                                            class="input" required=""><label for="inputRePass">请重复输入您的密码</label></div>
+                        </div>
+       <!--                 <p><a href="" class="hover-2">Forgot your password&#63;</a></p>-->
+                        <div class="btn-wrap col-md-12">
+
+                            <a href="javascript:void(0);" onclick="register()" class="twitter btn-2"><span>注册</span></a>
+                        </div>
+
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="button-close"></div>
+    </div>
+</div>

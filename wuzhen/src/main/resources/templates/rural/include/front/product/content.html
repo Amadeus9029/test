@@ -1,0 +1,368 @@
+<div th:fragment="html" xmlns:th="http://www.w3.org/1999/xhtml">
+    <script type="text/javascript">
+        var pid=getUrlParms("id");
+        var url1 = "forecheckLogin";
+        $(function () {
+            //获取数据
+            var dataProduct = {
+                uri: 'foreProducts',
+                product: '',
+                products: '',
+                reviews: [],
+                pvs: [],
+                category: null,
+                firstProductImage: null,
+                content: '',
+                user: {name: '', password: 0,points:0},
+                pNum:1
+            };
+            var vue = new Vue({
+                el: '#App',
+                data: dataProduct,
+                mounted: function () {
+                    this.list();
+                },
+                //展示数据
+                methods: {
+                    list: function () {
+                        var url = this.uri + "/" + pid;
+                        axios.get(url).then(function (response) {
+                            var result = response.data;
+                            vue.product = result.data.product;
+                            vue.pvs = result.data.pvs;
+                            vue.reviews = result.data.reviews;
+                            vue.category = vue.product.category;
+                            vue.products = result.data.products;
+                            vue.user = result.data.user;
+                            vue.firstProductImage = vue.product.firstProductImage;
+                        })
+                    },
+                    doreview: function () {
+                        axios.get(url1).then(function (response) {
+                            if (0 == response.data.code) {
+                                var url = "foredoreview?pid=" + vue.product.id + "&content=" + vue.content;
+                                axios.post(url).then(function (response) {
+                                    var result = response.data;
+                                    vue.list();
+                                });
+                            } else {
+                                swal({
+                                    title: '您还未登录',
+                                    text: '登录成功后，可以兑换商品',
+                                    timer: 2000
+                                })
+                            }
+                        });
+                    },
+                    addCart: function () {
+                        axios.get(url1).then(function (response) {
+                            if(0 == response.data.code){
+                                //登录过的
+                                swal({
+                                    title: '乌镇特产',
+                                    text: '恭喜你，成功将 '+vue.product.name+' 加入购物车成功',
+                                    imageUrl: 'img/productSingle/'+vue.firstProductImage.id+'.jpg',
+                                    imageWidth: 400,
+                                    imageHeight: 200,
+                                    timer:1500
+                                }).then(function() {
+                                    var num=$("#num").val();
+                                        var url = "addRecord?pid=" + vue.product.id+"&num="+num;
+                                        var result = response.data;
+                                        axios.post(url);
+                                    })
+                            }
+                            else{
+                                swal({
+                                    title: '您还未登录',
+                                    text: '登录成功后，可以兑换商品',
+                                    timer: 2000
+                                })
+                            }
+                        });
+                    },
+                    //立即兑换
+                    foreBuyOne: function () {
+                        var url = "forecheckLogin";
+                        axios.get(url1).then(function(response) {
+                            if(0==response.data.code){
+                                var pid = vue.product.id;
+                                var num=$("#num").val();
+                                var url =  "forebuyone?pid="+pid+"&num="+num;
+                                axios.get(url).then(function(response) {
+                                    var oiid = response.data;
+                                    location.href="check?oiid="+oiid;
+                                });
+                            }
+                            else{
+                                swal({
+                                    title: '您还未登录',
+                                    text: '登录成功后，可以兑换商品',
+                                    timer: 2000
+                                })
+                            }
+                        });
+                        return false;
+                    },
+                    addPNum:function(){
+                        this.pNum++
+                    },
+                    removePNum:function(){
+                        this.pNum=this.pNum-1>0?this.pNum-1:1
+                    }
+                    /*foreBuyOne: function () {
+                        axios.get(url1).then(function (response) {
+                            //登录过的
+                            swal({
+                                title: '兑换乌镇特产',
+                                text: '确定要花费'+vue.product.price+'积分，兑换该'+vue.product.name+'吗？',
+                                showCancelButton: true,
+                                imageUrl: 'img/productSingle/'+vue.firstProductImage.id+'.jpg',
+                                imageWidth: 400,
+                                imageHeight: 200,
+                                confirmButtonText: '兑换商品',
+                                cancelButtonText: '取消兑换',
+                                confirmButtonClass: 'btn btn-success',
+                                cancelButtonClass: 'btn btn-danger',
+                                buttonsStyling: false
+                            }).then(function(isConfirm) {
+                                if(0 == response.data.code){
+                                        var url = "foreBuyOne?pid=" + vue.product.id;
+                                            var result = response.data;
+                                            var isPoint=vue.user.points-vue.product.price;
+                                            if (isPoint>=0&&isConfirm==true&&result.code==0){
+                                                vue.user.points-=vue.product.price;
+                                                swal(
+                                                    '兑换成功',
+                                                    '当前用户余额：'+vue.user.points,
+                                                    'success'
+                                                );
+                                                axios.post(url);
+                                            }
+                                            else{
+                                                swal(
+                                                    '兑换失败',
+                                                    '当前用户余额：'+vue.user.points,
+                                                    'error'
+                                                );
+                                            }
+                                }
+                                else{
+                                    swal({
+                                        title: '您还未登录',
+                                        text: '登录成功后，可以兑换商品',
+                                        timer: 2000
+                                    })
+                                }
+                            })
+                        });
+                    }*/
+                }
+            });
+        });
+
+    </script>
+
+    <div class="shop"><!-- products -->
+        <div class="container">
+            <div class="empty-space h0-xs h80-md"></div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="sidebar-item">
+                        <div class="empty-space h30-xs h60-sm h0-md h0-lg"></div>
+                        <div class="search shop">
+                            <div class="input-wrapper search">
+                                <div class="input-style">
+                                    <input id="inputSearch" name="keyword" type="text" class="input"
+                                                                required="">
+                                    <label for="inputSearch">Search</label>
+                                    <div class="input-icon">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                        <input type="submit" id="searchsubmit" value=""></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <div class="sidebar-blok"><h4 class="h5 title">标签</h4>
+                            <div class="empty-space h20-xs"></div>
+                            <a href="" class="tag-link">美食特产</a>
+                            <a class="tag-link">乌镇乡土</a>
+                            <a   href="#nowhere" v-for="pv in pvs"  class="tag-link">{{pv.property.name}}</a>
+                        </div>
+                        <div class="empty-space 50-sm h40-xs"></div>
+                        <div class="sidebar-blok">
+                            <div class="swiper-container" data-speed="1000" data-pagination-rel="1" data-breakpoints="1"
+                                 data-slides-per-view="1" data-xs-slides="1" data-sm-slides="1" data-md-slides="1">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <div class="twitter-slide"><i class="date">20 min ago</i><i
+                                                class="fa fa-twitter icon"></i>
+                                            <div class="empty-space h40-xs"></div>
+                                            <div class="simple-text"><p>Lorem ipsum dolor sit amet. Labore quibusdam in
+                                                sint quam impedit quia repellat a, nulla ab sapiente.</p></div>
+                                            <div class="empty-space h20-xs"></div>
+                                            <a href="" class="tw-author">@mevotemplate</a><a href=""><i>https://www.youtube.com/</i></a>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="twitter-slide"><i class="date">20 min ago</i><i
+                                                class="fa fa-twitter icon"></i>
+                                            <div class="empty-space h40-xs"></div>
+                                            <div class="simple-text"><p>Lorem ipsum dolor sit amet. Labore quibusdam in
+                                                sint quam impedit quia repellat a, nulla ab sapiente.</p></div>
+                                            <div class="empty-space h20-xs"></div>
+                                            <a href="" class="tw-author">@mevotemplate</a><a href=""><i>https://www.youtube.com/</i></a>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="twitter-slide"><i class="date">20 min ago</i><i
+                                                class="fa fa-twitter icon"></i>
+                                            <div class="empty-space h40-xs"></div>
+                                            <div class="simple-text"><p>Lorem ipsum dolor sit amet. Labore quibusdam in
+                                                sint quam impedit quia repellat a, nulla ab sapiente.</p></div>
+                                            <div class="empty-space h20-xs"></div>
+                                            <a href="" class="tw-author">@mevotemplate</a><a href=""><i>https://www.youtube.com/</i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-pagination swiper-pagination-black pagination-type-1"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-8 pull-right">
+                    <div class="detail-item">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <img class="img-main" v-if="firstProductImage!=null" :src="'img/productSingle/'+firstProductImage.id+'.jpg'">
+                                <div class="img-preview">
+                                    <img class="imgSmall"
+                                         v-for="(pi,index) in product.productSingleImages"
+                                         :src="'img/productSingle_small/'+pi.id+'.jpg'"
+                                         :data-src="'img/productSingle/'+pi.id+'.jpg'"
+                                        />
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="col-md-5">
+                                <article class="description"><h3 class="h3">{{product.name}}</h3>
+                                    <ul>
+
+                                        <li><span>价格:</span><span class="price">{{pNum*product.price}}</span></li>
+                                        <li><span>评分:</span><span class="info">26</span>
+                                            <span class="star"><i
+                                                class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                             aria-hidden="true"></i><i
+                                                class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                             aria-hidden="true"></i><i
+                                                class="fa fa-star-o" aria-hidden="true"></i></span></li>
+                                    </ul>
+                                    <p>{{product.content}}</p>
+
+                                </article>
+                                <div class="quantity-wrapper">
+                                    <span>数量:</span>
+                                    <div class="quantity">
+                                        <input id="num" type="number" v-model="pNum">
+                                        <i class="fa fa-caret-left"  @click="removePNum"  aria-hidden="true"></i><i
+                                            class="fa fa-caret-right" @click="addPNum" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <div class="btn-wrap"><a href="#nowhere"  @click="foreBuyOne" class="btn-2"><span>立即兑换</span></a></div>
+                                <div class="btn-wrap"><a href="#nowhere"  @click="addCart" class="btn-2"><span>加入购物车</span></a></div>
+                            </div>
+                            </div>
+                        </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="tabs-block">
+                                <div class="tab-menu active">属性</div>
+                                <div class="tab-menu">评论</div>
+                                <div class="tab-entry" style="display: block;">
+                                    <div class="article">
+                                        <p>产品属性</p>
+                                        <ul class="disc">
+                                            <li v-for="pv in pvs"><span>{{pv.property.name}}: {{pv.value | subStringFilter(0,10)}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="tab-entry">
+                                    <div v-for="r in reviews" class="testimonial">
+                                        <img src="img/front/shop/testimonial-1.jpg" alt="">
+                                        <div class="article">
+                                            <div class="author">
+                                                <span class="h6">{{r.user.name}}</span>
+                                                <span>{{r.createDate}}</span>
+                                                <span class="star">
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <p>{{r.content}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="testimonial-form-wrapper">
+                                        <div class="empty-space h20-xs"></div>
+                                        <h4 class="h4 text-center">Add your review</h4>
+                                        <div class="empty-space h30-xs"></div>
+                                        <form>
+                                            <div class="input-wrapper">
+                                                <div class="input-style textarea">
+                                                    <textarea id="inputMessage" v-model="content" name="message" class="input" required=""></textarea>
+                                                    <label for="inputMessage">Review</label></div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="y-rating"><span>YOUR RATING:</span><span class="star"><i
+                                                    class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                                 aria-hidden="true"></i><i
+                                                    class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star"
+                                                                                                 aria-hidden="true"></i><i
+                                                    class="fa fa-star-o" aria-hidden="true"></i></span></div>
+                                        </div>
+                                        <div class="col-sm-6 text-right">
+                                            <div class="btn-wrap"><a href="#nowhere"  @click="doreview" class="btn-2"><span>提交评价</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                <div class="empty-space h60-xs"></div>
+                    <div class="empty-space h50-xs h100-md"></div>
+                    <div class="empty-space h0-xs h10-md"></div>
+                    <div class="row text-center">
+                        <div class="col-xs-12"><h2 class="h2">美食特产</h2>
+                            <div class="empty-space h30-xs"></div>
+                        </div>
+                        <div v-if="index<4" v-for="(p,index) in products" class="col-md-3 col-sm-6">
+                            <a :href="'front_productDetail_list?id='+p.id" class="img-hover-2">
+                            <img   :src="'img/productSingle/'+p.id+'.jpg'" alt="" class="img">
+                            </a>
+                            <article>
+                                <div class="empty-space h10-xs"></div>
+                                <a href=""><h6 class="h8 hover-4">{{p.name}}</h6></a>
+                                <div class="empty-space h5-xs"></div>
+                                <span class="price price-sm">{{p.price}}</span>
+                                <div class="empty-space h30-xs h0-sm"></div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="empty-space h65-xs h100-md"></div>
+    <div class="empty-space h0-xs h30-md"></div><!-- footer -->
+
+</div>

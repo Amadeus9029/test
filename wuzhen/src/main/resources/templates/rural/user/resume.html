@@ -1,0 +1,26 @@
+<div th:fragment="html" id="resume" class="resume-section section" xmlns:th="http://www.w3.org/1999/xhtml">
+        <div class="panel panel-warning editDiv">
+            <div class="panel-heading">编辑用户</div>
+            <div class="panel-body">
+                <table class="editTable">
+                    <tr>
+                        <td>用户名称</td>
+                        <td><input id="userName" th:value="${session.user.name}" type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>用户头像</td>
+                        <td>
+\                            <input id="file" onchange="getHeaderImg(event)"  accept="image/*" type="file" name="image" />
+                        </td>
+                    </tr>
+                    <tr class="submitTR">
+                        <td colspan="2" align="center">
+                            <input type="hidden" name="id"  >
+                            <a href="javascript:void(0);" class="btn btn-success" onclick="updateUser(event)">提 交</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+</div>

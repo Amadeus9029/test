@@ -1,0 +1,90 @@
+<div th:fragment="html" id="content" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <section class="section">
+        <div class="empty-space h90-xs h100-md"></div>
+        <div class="empty-space h0-xs h80-md"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 text-center"><h2 class="h2">乌镇文化</h2></div>
+                <div class="col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+                    <div class="text-center grey-dark">
+                        <div class="empty-space h25-xs"></div>
+                        <p>乡土文化是中华民族得以繁衍发展的精神寄托和智慧结晶，是区别于任何其它文明的唯一特征，是民族凝聚力和进取心的真正动因！乡土文化无论是物质的、非物质的都是不可替代的无价之宝！</p></div>
+                </div>
+            </div>
+            <div class="empty-space h45-xs h65-md"></div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div v-for="p in products"  class="blog-item">
+                        <div class="image">
+                            <a href="#nowhere" class="bg-item"
+                               :style="getFolkImg(p.id)"></a>
+                            <div class="blog-link">
+                                <a href="">
+                                    <span>12</span>
+                                    <i class="fa fa-heart-o"></i></a>
+                                <a href=""><span>7</span>
+                                <i class="fa fa-comments-o"></i></a>
+                            </div>
+                            <div class="blog-cat"><a href="">design</a></div>
+                            <div class="hover-type-img"><span></span>
+                            </div>
+                        </div>
+                        <div class="text">
+                            <div class="empty-space h20-xs"></div>
+                            <h5 class="h5 title"><a href="#nowhere" class="hover-4">{{p.name}}</a>
+                            </h5><i>Goran Ramljak / January 19, 2016</i>
+                            <div class="empty-space h10-xs"></div>
+                            <div class="simple-text"><p>{{p.content}}</p></div>
+                        </div>
+                    </div>
+                    <div th:replace="/rural/include/front/frontPage::html" ></div>
+                    <div class="clear"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="sidebar-item">
+                        <div class="empty-space h30-xs h60-sm h0-md h0-lg"></div>
+                        <div class="search shop">
+                            <div class="input-wrapper search">
+                                <div class="input-style"><input id="inputSearch" name="name" type="text" class="input"
+                                                                required=""><label for="inputSearch">Search</label>
+                                    <div class="input-icon"><i class="fa fa-search" aria-hidden="true"></i><input
+                                            type="submit" id="searchsubmit" value=""></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <!--标签-->
+                        <div class="sidebar-blok">
+                            <h4 class="h5 title">标签</h4>
+                            <div class="empty-space h20-xs"></div>
+                            <a href="" class="tag-link">美食特产</a>
+                            <a class="tag-link">乌镇乡土</a>
+                            <a   href="#nowhere" v-for="pv in pvs"  class="tag-link">{{pv.property.name}}</a>
+                        </div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <!--视频-->
+                        <div class="sidebar-blok">
+                            <div class="video-item"><a href="post.html" class="bg-item hover-img"
+                                                       style="background-image:url(img/front/video_bg.jpg)"></a>
+                                <div class="play-button open-popup" data-rel="5"><i class="fa fa-play"></i></div>
+                            </div>
+                        </div>
+                        <div class="empty-space h50-sm h40-xs"></div>
+                        <div class="sidebar-blok">
+                            <h4 class="h5 title">热门特产</h4>
+                            <div class="empty-space h20-xs"></div>
+                            <div class="instagram-item">
+                                <a  v-if="index<5"   v-for="(product,index) in products" href="#nowhere">
+                                    <img   :src="'img/productSingle/'+product.id+'.jpg'" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="empty-space h30-xs h70-md"></div>
+        <div class="empty-space h30-xs"></div>
+    </section><!-- footer -->
+</div>

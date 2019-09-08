@@ -1,0 +1,230 @@
+<template th:fragment="html">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style type="text/css">
+        .demo{padding: 2em 0;}
+        .our-team{
+            padding: 30px 0 40px;
+            background: #f7f5ec;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .our-team .pic{
+            display: inline-block;
+            width: 130px;
+            height: 130px;
+            margin-bottom: 50px;
+            z-index: 1;
+            position: relative;
+        }
+        .our-team .pic:before{
+            content: "";
+            width: 100%;
+            height: 0;
+            border-radius: 50%;
+            background: #2B2C2A;
+            position: absolute;
+            bottom: 135%;
+            right: 0;
+            left: 0;
+            opacity: 0.2;
+            transform: scale(3);
+            transition: all 0.3s linear 0s;
+        }
+        .our-team:hover .pic:before{ height: 100%; }
+        .our-team .pic:after{
+            content: "";
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #2B2C2A;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .our-team .pic img{
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform: scale(1);
+            transition: all 0.9s ease 0s;
+        }
+        .our-team:hover .pic img{
+            box-shadow: 0 0 0 14px #f7f5ec;
+            transform: scale(0.7);
+        }
+        .our-team .team-content{ margin-bottom: 30px; }
+        .our-team .title{
+            font-size: 22px;
+            font-weight: 700;
+            color: #4e5052;
+            letter-spacing: 1px;
+            text-transform: capitalize;
+            margin-bottom: 5px;
+        }
+        .our-team .post{
+            display: block;
+            font-size: 15px;
+            color: #4e5052;
+            text-transform:capitalize;
+        }
+        .our-team .social{
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            background: #2B2C2A;
+            position: absolute;
+            bottom: -100px;
+            left: 0;
+            transition: all 0.5s ease 0s;
+        }
+        .our-team:hover .social{ bottom: 0; }
+        .our-team .social li{ display: inline-block; }
+        .our-team .social li a{
+            display: block;
+            padding: 10px;
+            font-size: 17px;
+            color: #fff;
+            transition: all 0.3s ease 0s;
+        }
+        .our-team .social li a:hover{
+            color: #2B2C2A;
+            background: #f7f5ec;
+        }
+        @media only screen and (max-width: 990px){
+            .our-team{ margin-bottom: 30px; }
+        }
+    </style>
+    <link href="css/front/animate.min.css" rel="stylesheet" type="text/css">
+    <link href="css/front/animsition.min.css" rel="stylesheet" type="text/css">
+    <link href="css/front/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet"  href="css/front/buttons.css" type="text/css">
+    <link href="css/front/swiper.min.css" rel="stylesheet" type="text/css">
+    <link href="css/front/simplelightbox.css" rel="stylesheet" type="text/css">
+    <link href="css/front/style.css" rel="stylesheet" type="text/css">
+    <link href="css/front/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/front/sumoselect.css" rel="stylesheet">
+    <link rel="stylesheet"  href="css/front/sweetalert2.min.css" type="text/css">
+    <script src="js/front/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript">
+        function getUrlParms(para){
+            var search=location.search; //页面URL的查询部分字符串
+            var arrPara=new Array(); //参数数组。数组单项为包含参数名和参数值的字符串，如“para=value”
+            var arrVal=new Array(); //参数值数组。用于存储查找到的参数值
+
+            if(search!=""){
+                var index=0;
+                search=search.substr(1); //去除开头的“?”
+                arrPara=search.split("&");
+
+                for(i in arrPara){
+                    var paraPre=para+"="; //参数前缀。即参数名+“=”，如“para=”
+                    if(arrPara[i].indexOf(paraPre)==0&& paraPre.length<arrPara[i].length){
+                        arrVal[index]=decodeURI(arrPara[i].substr(paraPre.length)); //顺带URI解码避免出现乱码
+                        index++;
+                    }
+                }
+            }
+
+            if(arrVal.length==1){
+                return arrVal[0];
+            }else if(arrVal.length==0){
+                return null;
+            }else{
+                return arrVal;
+            }
+        }
+
+        function checkEmpty(id, name){
+            var value = $("#"+id).val();
+            if(value.length==0){
+                $("#"+id)[0].focus();
+                return false;
+            }
+            return true;
+        }
+        //跳转函数
+        function jump(page,vue){
+            if('first'== page && !vue.pagination.first)
+                vue.list(0);
+
+            else if('pre'== page &&	vue.pagination.hasPrevious )
+                vue.list(vue.pagination.number-1);
+
+            else if('next'== page && vue.pagination.hasNext)
+                vue.list(vue.pagination.number+1);
+
+            else if('last'== page && !vue.pagination.last)
+                vue.list(vue.pagination.totalPages-1);
+        }
+        //跳转函数
+        function jumpByNumber(start,vue){
+            if(start!=vue.pagination.number)
+                vue.list(start);
+        }
+        function login(){
+            var name=$('#userName').val();
+            var password=$('#password').val();
+                var url =  "forelogin";
+                if(0==name.length){
+                    $("p.errorMessage").html("请输入用户名");
+                    $("div.loginErrorMessageDiv").css("visibility","visible");
+                    return;
+                }
+                if(0==password.length){
+                    console.log("密码")
+                    $("p.errorMessage").html("请输入密码");
+                    $("div.loginErrorMessageDiv").css("visibility","visible");
+                    return;
+                }
+            var formatData=new FormData();
+            formatData.append("name",name);
+            formatData.append("password",password);
+                axios.post(url,formatData).then(function(response) {
+                    var result = response.data;
+                    if(result.code==0){
+                        location.href="frontIndex";
+                    }
+                    else{
+                        $("p.errorMessage").html(result.message);
+                        $("div.loginErrorMessageDiv").css("visibility","visible");
+                    }
+                });
+        }
+        function register(){
+            var name=$('#userName2').val();
+            var password=$('#inputRePass').val();
+            var url =  "foreregister";
+            if(0==name.length){
+                $("p.errorMessage2").html("请输入用户名");
+                $("div.registerErrorMessageDiv").css("visibility","visible");
+                return;
+            }
+            if(0==password.length){
+                console.log("密码")
+                $("p.errorMessage2").html("请输入密码");
+                $("div.registerErrorMessageDiv").css("visibility","visible");
+                return;
+            }
+            var formatData=new FormData();
+            formatData.append("name",name);
+            formatData.append("password",password);
+            axios.post(url,formatData).then(function(response) {
+                var result = response.data;
+                if(result.code==0){
+                    console.log("登录成功")
+
+                }
+                else{
+                    $("p.errorMessage2").html(result.message);
+                    $("div.registerErrorMessageDiv").css("visibility","visible");
+                }
+            });
+        }
+    </script>
+    <title>乡村教育文化</title>
+
+</template>

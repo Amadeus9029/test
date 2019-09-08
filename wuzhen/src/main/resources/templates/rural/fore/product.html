@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="include/admin/adminHeader::html('分类管理')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head >
+<body>
+<script type="text/javascript">
+    var cid=getUrlParms("id");
+    $("#workingArea").load(function () {
+        //获取数据
+        var dataProduct={
+            uri:'foreProducts',
+            product:'',
+            products:[],
+            pagination:{}
+        };
+        var vue=new Vue({
+            el:'#workingArea',
+            data:dataProduct,
+            mounted:function () {
+                this.list(0);
+            },
+            //展示数据
+            methods:{
+                list:function (start) {
+                    var url="foreCategories/"+cid+"/"+this.uri+"?start="+start;
+                    axios.get(url).then(function (response) {
+                        vue.pagination=response.data;
+                        vue.products=response.data.content;
+                    })
+                },
+                jump:function (page) {
+                    jump(page,vue);
+                },
+                jumpByNumber:function (start) {
+                    jumpByNumber(start,vue);
+                }
+            }
+        })
+    });
+</script>
+<div id="workingArea">
+    <div>
+        产品搜索:
+        <input type="text" />
+        <a href="#nowhere"  class="btn btn-success">提交</a>
+    </div>
+    <table>
+
+        <th>产品ID</th>
+        <th>产品图片</th>
+        <th>产品名称</th>
+        <th>产品小标题</th>
+        <tr v-for="product in products">
+            <td><a href="">{{product.id}}</a></td>
+            <td><img v-if="null != product.firstProductImage" width="40px" :src="'img/productSingle/'+product.firstProductImage.id+'.jpg'"></td>
+            <td><a :href="'fore_productDetail_list?id='+product.id">{{product.name}}</a></td>
+
+        </tr>
+    </table>
+    <div th:replace="include/admin/adminPage::html"></div>
+</div>
+</body>
+</html>

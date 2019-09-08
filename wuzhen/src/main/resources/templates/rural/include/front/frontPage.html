@@ -1,0 +1,10 @@
+<div class="shop"  th:fragment="html">
+	<div class="page-pagination">
+		<a :class="{ disabled: pagination.first }"  href="javascript:void(0);" @click="jump('first')">«</a>
+		<a  v-for="i in pagination.navigatepageNums" href="javascript:void(0);" @click="jumpByNumber(i-1)">
+			{{i}}
+		</a>
+		<a :class="{ disabled: !pagination.hasNext }" href="javascript:void(0);" @click="jump('next')">›</a>
+		<a :class="{ disabled: pagination.last }" href="javascript:void(0);" @click="jump('last')"> »</a>
+	</div>
+</div>

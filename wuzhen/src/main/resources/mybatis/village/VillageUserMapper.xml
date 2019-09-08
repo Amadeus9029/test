@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuzhen.village.dao.VillageUserDao">
+
+	<select id="get" resultType="com.wuzhen.village.domain.VillageUserDO">
+		select `id`,`name`,`password`,`salt`,`points`,`level` from user where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.wuzhen.village.domain.VillageUserDO">
+		select `id`,`name`,`password`,`salt`,`points`,`level` from user
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="password != null and password != ''"> and password = #{password} </if>
+		  		  <if test="salt != null and salt != ''"> and salt = #{salt} </if>
+		  		  <if test="points != null and points != ''"> and points = #{points} </if>
+		  		  <if test="level != null and level != ''"> and level = #{level} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from user
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="password != null and password != ''"> and password = #{password} </if>
+		  		  <if test="salt != null and salt != ''"> and salt = #{salt} </if>
+		  		  <if test="points != null and points != ''"> and points = #{points} </if>
+		  		  <if test="level != null and level != ''"> and level = #{level} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.wuzhen.village.domain.VillageUserDO" useGeneratedKeys="true" keyProperty="id">
+		insert into user
+		(
+			`name`, 
+			`password`, 
+			`salt`, 
+			`points`, 
+			`level`
+		)
+		values
+		(
+			#{name}, 
+			#{password}, 
+			#{salt}, 
+			#{points}, 
+			#{level}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.wuzhen.village.domain.VillageUserDO">
+		update user 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="salt != null">`salt` = #{salt}, </if>
+			<if test="points != null">`points` = #{points}, </if>
+			<if test="level != null">`level` = #{level}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from user where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from user where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

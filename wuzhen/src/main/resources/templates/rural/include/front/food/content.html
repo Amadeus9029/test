@@ -1,0 +1,77 @@
+<div th:fragment="html">
+
+
+
+    <div class="shop shop-2"><!-- products -->
+        <div class="container">
+            <div class="empty-space h100-md"></div>
+            <form class="shop-form">
+                <div class="row">
+                    <div class="col-md-4">
+                      <!--  <div class="found"><p>found <span>127</span>items</p></div>-->
+                            <div class="search">
+                                <div class="input-wrapper search">
+                                    <div class="input-style">
+                                        <input id="inputSearch" name="name" type="text" class="input" required="">
+                                        <label for="inputSearch">查找</label>
+                                        <div class="input-icon">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                            <input type="submit" id="searchsubmit" value=""></div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="inline-wrapper">
+                            <select name="sortby" class="select-box">
+                            <option disabled="" selected="">Sort by</option>
+                            <option value="sort1">Sort1</option>
+                            <option value="sort2">Sort2</option>
+                            <option value="sort3">Sort3</option>
+                            <option value="sort4">Sort4</option>
+                        </select>
+                            <span class="input-txt-left">Show</span>
+                            <select name="show" class="select-box">
+                            <option value="10">10</option>
+                            <option value="30">30</option>
+                            <option value="50">50</option>
+                        </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="empty-space h30-xs"></div>
+            <div class="row">
+
+                <div class="col-md-12 nopadding">
+                    <div  class="prod-item-wrapper">
+                        <div v-for="product in products" class="shop-prod-item">
+                            <a :href="'front_productDetail_list?id='+product.id" class="img-hover-1">
+                                <img v-if="null != product.firstProductImage" width="220px" height="250px":src="'img/productSingle/'+product.firstProductImage.id+'.jpg'" >
+                                <span class="shop-prod-item-hover">
+                                <span class="btn-2 open-popup" data-rel="4">
+                                    <span >加入购物车</span>
+                                </span>
+                                <span class="btn-2">
+                                    <span>立即兑换</span>
+                                </span>
+                                <i class="fa fa-heart-o fa-lg" aria-hidden="true"></i></span></a>
+                            <div class="description">
+                                <article>
+                                    <a :href="'front_productDetail_list?id='+product.id">
+                                        <h6 class="h6 hover-4">{{product.name}}&nbsp;|&nbsp;{{product.price}}$</h6></a>
+                                    <div class="empty-space h5-xs"></div>
+                                    </article>
+                            </div>
+                        </div>
+                        <div th:replace="rural/include/front/frontPage::html" ></div>
+                </div>
+
+                </div>
+        </div>
+    </div>
+</div>
+
+
+</div>

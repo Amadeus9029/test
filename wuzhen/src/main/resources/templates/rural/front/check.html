@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link href="css/front/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="css/front/style.css" rel="stylesheet" type="text/css">
+<link href="css/front/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="cart/css/base2.css">
+<link rel="stylesheet" href="cart/css/checkout.css">
+<link rel="stylesheet" href="cart/css/modal.css">
+<link rel="stylesheet"  href="css/front/sweetalert2.min.css" type="text/css">
+<script src="js/front/jquery-2.2.4.min.js"></script>
+<script type="text/javascript">
+    function getUrlParms(para){
+        var search=location.search; //页面URL的查询部分字符串
+        var arrPara=new Array(); //参数数组。数组单项为包含参数名和参数值的字符串，如“para=value”
+        var arrVal=new Array(); //参数值数组。用于存储查找到的参数值
+
+        if(search!=""){
+            var index=0;
+            search=search.substr(1); //去除开头的“?”
+            arrPara=search.split("&");
+
+            for(i in arrPara){
+                var paraPre=para+"="; //参数前缀。即参数名+“=”，如“para=”
+                if(arrPara[i].indexOf(paraPre)==0&& paraPre.length<arrPara[i].length){
+                    arrVal[index]=decodeURI(arrPara[i].substr(paraPre.length)); //顺带URI解码避免出现乱码
+                    index++;
+                }
+            }
+        }
+
+        if(arrVal.length==1){
+            return arrVal[0];
+        }else if(arrVal.length==0){
+            return null;
+        }else{
+            return arrVal;
+        }
+    }
+    function login(){
+        var name=$('#userName').val();
+        var password=$('#password').val();
+        var url =  "forelogin";
+        if(0==name.length){
+            $("p.errorMessage").html("请输入用户名");
+            $("div.loginErrorMessageDiv").css("visibility","visible");
+            return;
+        }
+        if(0==password.length){
+            console.log("密码")
+            $("p.errorMessage").html("请输入密码");
+            $("div.loginErrorMessageDiv").css("visibility","visible");
+            return;
+        }
+        var formatData=new FormData();
+        formatData.append("name",name);
+        formatData.append("password",password);
+        axios.post(url,formatData).then(function(response) {
+            var result = response.data;
+            if(result.code==0){
+                location.href="frontIndex";
+            }
+            else{
+                $("p.errorMessage").html(result.message);
+                $("div.loginErrorMessageDiv").css("visibility","visible");
+            }
+        });
+    }
+    function register(){
+        var name=$('#userName2').val();
+        var password=$('#inputRePass').val();
+        var url =  "foreregister";
+        if(0==name.length){
+            $("p.errorMessage2").html("请输入用户名");
+            $("div.registerErrorMessageDiv").css("visibility","visible");
+            return;
+        }
+        if(0==password.length){
+            console.log("密码")
+            $("p.errorMessage2").html("请输入密码");
+            $("div.registerErrorMessageDiv").css("visibility","visible");
+            return;
+        }
+        var formatData=new FormData();
+        formatData.append("name",name);
+        formatData.append("password",password);
+        axios.post(url,formatData).then(function(response) {
+            var result = response.data;
+            if(result.code==0){
+                console.log("登录成功")
+
+            }
+            else{
+                $("p.errorMessage2").html(result.message);
+                $("div.registerErrorMessageDiv").css("visibility","visible");
+            }
+        });
+    }
+</script>
+<title>乡村教育文化</title>
+<body>
+<div th:replace="rural/include/front/top::html"></div>
+<div class="empty-space h30-md"></div>
+<div th:replace="rural/include/front/cart/check::html"></div>
+<div class="popup-wrapper">
+    <div class="bg-layer"></div>
+    <!--用户信息页面-->
+    <div th:replace="rural/include/front/userInfo::html" ></div>
+    <!--登录页面-->
+    <div th:replace="rural/include/front/login::html" ></div>
+    <!--注册页面-->
+    <div th:replace="rural/include/front/register::html" ></div>
+    <!--购物车页面-->
+    <div th:replace="rural/include/front/cart::html" ></div>
+</div>
+
+<script src="js/front/jquery.sumoselect.min.js"></script>
+<script src="js/front/isotope.pkgd.min.js"></script>
+<script src="js/front/global.js"></script>
+<script src="js/vue/2.5.16/vue.min.js"></script>
+<script src="js/axios/0.17.1/axios.min.js"></script>
+<script src="js/moment/2.22.2/moment.js"></script>
+<script src="cart/js/vue2.min.js"></script>
+<script src="cart/js/vue-resource.min.js"></script>
+<script src="cart/js/check.js"></script>
+<script src="js/front/sweetalert2.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<div th:fragment="html" class="popup-wrapper" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="bg-layer"></div>
+    <!--用户信息页面-->
+    <div th:replace="rural/include/front/userInfo::html" ></div>
+    <!--登录页面-->
+    <div th:replace="rural/include/front/login::html" ></div>
+    <!--注册页面-->
+    <div th:replace="rural/include/front/register::html" ></div>
+    <!--购物车页面-->
+    <div th:replace="rural/include/front/cart::html" ></div>
+    <script src="js/front/sweetalert2.min.js"></script>
+    <script src="js/front/swiper.jquery.min.js"></script>
+    <script src="js/front/simple-lightbox.min.js"></script>
+    <script src="js/front/jquery.sumoselect.min.js"></script>
+    <script src="js/front/isotope.pkgd.min.js"></script>
+    <script src="js/front/global.js"></script>
+    <script src="js/front/animsition.min.js"></script>
+    <script src="js/front/wow.min.js"></script>
+    <script src="js/front/script.js"></script>
+    <script src="js/vue/2.5.16/vue.min.js"></script>
+    <script src="js/axios/0.17.1/axios.min.js"></script>
+    <script type="text/javascript">
+        var cid=getUrlParms("id");
+        $(function () {
+            //获取数据
+            var dataProduct={
+                uri:'foreProducts',
+                product:'',
+                products:[],
+                pagination:{},
+                pvs: [],
+                user:{name:'',password:0}
+            };
+            var vue=new Vue({
+                el:'#App',
+                data:dataProduct,
+                mounted:function () {
+                    this.list(0);
+                },
+                //展示数据
+                methods:{
+                    list:function (start) {
+                        var url="foreCategories/"+cid+"/"+this.uri+"?start="+start;
+                        axios.get(url).then(function (response) {
+                            vue.pagination=response.data;
+                            vue.products=response.data.content;
+                        })
+                    },
+                    jump:function (page) {
+                        jump(page,vue);
+                    },
+                    jumpByNumber:function (start) {
+                        jumpByNumber(start,vue);
+                    },
+                    getFolkImg:function(img){
+                        return "background-image:url(img/productSingle/"+img+".jpg";
+                    }
+                }
+            })
+        });
+    </script>
+    <script src="js/moment/2.22.2/moment.js"></script>
+</div>

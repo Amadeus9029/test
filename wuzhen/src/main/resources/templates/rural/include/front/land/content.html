@@ -1,0 +1,61 @@
+<div id="content" th:fragment="html" xmlns:th="http://www.w3.org/1999/xhtml">
+    <script type="text/javascript">
+        var cid=getUrlParms("id");
+        $(function () {
+            //获取数据
+            var dataProduct={
+                uri:'foreProducts',
+                product:'',
+                products:[],
+                pagination:{},
+                user:{name:'',password:0}
+            };
+            var vue=new Vue({
+                el:'#AppId',
+                data:dataProduct,
+                mounted:function () {
+                    this.list(0);
+                },
+                //展示数据
+                methods:{
+                    list:function (start) {
+                        var url="foreCategories/"+cid+"/"+this.uri+"?start="+start;
+                        axios.get(url).then(function (response) {
+                            vue.pagination=response.data;
+                            vue.products=response.data.content;
+                        })
+                    },
+                    jump:function (page) {
+                        jump(page,vue);
+                    },
+                    jumpByNumber:function (start) {
+                        jumpByNumber(start,vue);
+                    },
+                    getImgSrc:function(img){
+                        return "background-image:url(img/productSingle/"+img+".jpg";
+                    }
+                }
+            })
+        });
+    </script>
+    <section class="section">
+        <div class="empty-space h30-xs h100-md"></div>
+        <div class="empty-space h30-xs h0-md"></div>
+        <div class="container-fluid">
+            <div class="row">
+                <div v-for="product in products" class="food col-sm-4 col-xs-12">
+                    <div class="detail-bg-item">
+                        <div class="bg-item" :style="getImgSrc(product.firstProductImage.id)"></div>
+                        <div class="cell-view white-color">
+                            <h4 class="h5 title">
+                            <a :href="'front_landDetail_list?id='+product.id" class="hover-text">{{product.name}}</a>
+                            </h4>
+                            <i>{{product.subTitle}}</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="rural/include/front/frontPage::html" ></div>
+        </div>
+    </section><!-- footer -->
+</div>
