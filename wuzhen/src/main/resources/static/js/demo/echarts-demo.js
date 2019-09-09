@@ -92,7 +92,7 @@ $(function () {
         $(window).resize(lineChart.resize);
     })
 
-
+    //柱状图
     var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
     var baroption = {
         title : {
@@ -159,7 +159,7 @@ $(function () {
     barChart.setOption(baroption);
 
     window.onresize = barChart.resize;
-
+    //散点图
     var scatterChart = echarts.init(document.getElementById("echarts-scatter-chart"));
     var scatteroption = {
         title : {
@@ -373,7 +373,7 @@ $(function () {
     scatterChart.setOption(scatteroption);
     $(window).resize(scatterChart.resize);
 
-
+    //K线图
     var kChart = echarts.init(document.getElementById("echarts-k-chart"));
     var koption = {
         title : {
@@ -536,6 +536,7 @@ $(function () {
     kChart.setOption(koption);
     $(window).resize(kChart.resize);
 
+    //饼状图
     var pieChart = echarts.init(document.getElementById("echarts-pie-chart"));
     var pieoption = {
         title : {
@@ -572,6 +573,7 @@ $(function () {
     pieChart.setOption(pieoption);
     $(window).resize(pieChart.resize);
 
+    //雷达图
     var radarChart = echarts.init(document.getElementById("echarts-radar-chart"));
     var radaroption = {
         title : {
@@ -621,6 +623,7 @@ $(function () {
     radarChart.setOption(radaroption);
     $(window).resize(radarChart.resize);
 
+    //中国地图
     var mapChart = echarts.init(document.getElementById("echarts-map-chart"));
     var mapoption = {
         title : {
@@ -763,6 +766,7 @@ $(function () {
     mapChart.setOption(mapoption);
     $(window).resize(mapChart.resize);
 
+    //和弦图
     var chordChart = echarts.init(document.getElementById("echarts-chord-chart"));
     var chordoption = {
         title : {
@@ -826,6 +830,7 @@ $(function () {
     chordChart.setOption(chordoption);
     $(window).resize(chordChart.resize);
 
+    //力导向布局图
     var forceChart = echarts.init(document.getElementById("echarts-force-chart"));
     var forceoption ={
         title : {
@@ -939,6 +944,7 @@ $(function () {
     forceChart.setOption(forceoption);
     $(window).resize(forceChart.resize);
 
+    //仪表盘
     var gaugeChart = echarts.init(document.getElementById("echarts-gauge-chart"));
     var gaugeoption = {
         tooltip : {
@@ -1128,6 +1134,7 @@ $(function () {
     gaugeChart.setOption(gaugeoption);
     $(window).resize(gaugeChart.resize);
 
+    //漏斗图
     var funnelChart = echarts.init(document.getElementById("echarts-funnel-chart"));
     var funneloption = {
         title : {

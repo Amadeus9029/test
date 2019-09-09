@@ -1,5 +1,7 @@
 package com.wuzhen.village.domain;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -22,6 +24,8 @@ public class VillageProductDO implements Serializable {
 	//
 	private Integer cid;
 	//
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdate;
 	//
 	private String content;

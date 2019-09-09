@@ -1,6 +1,45 @@
 <div th:fragment="html">
 
-
+    <script type="text/javascript">
+        var cid=getUrlParms("id");
+        $(function () {
+            //获取数据
+            var dataProduct={
+                uri:'foreProducts',
+                product:'',
+                products:[],
+                pagination:{},
+                pvs: [],
+                user:{name:'',password:0}
+            };
+            var vue=new Vue({
+                el:'#App',
+                data:dataProduct,
+                mounted:function () {
+                    this.list(0);
+                },
+                //展示数据
+                methods:{
+                    list:function (start) {
+                        var url="foreCategories/"+cid+"/"+this.uri+"?start="+start;
+                        axios.get(url).then(function (response) {
+                            vue.pagination=response.data;
+                            vue.products=response.data.content;
+                        })
+                    },
+                    jump:function (page) {
+                        jump(page,vue);
+                    },
+                    jumpByNumber:function (start) {
+                        jumpByNumber(start,vue);
+                    },
+                    getFolkImg:function(img){
+                        return "background-image:url(img/productSingle/"+img+".jpg";
+                    }
+                }
+            })
+        });
+    </script>
 
     <div class="shop shop-2"><!-- products -->
         <div class="container">
